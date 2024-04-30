@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <section class="text-gray-600 body-font">
+        <div class="container px-5 py-24 mx-auto flex flex-wrap">
+            <h2 class="sm:text-3xl text-2xl text-gray-900 font-medium title-font mb-2 md:w-2/5">Blockchain identity mangement system</h2>
+            <div class="md:w-3/5 md:pl-6">
+                <p class="leading-relaxed text-base">The project is to create an online blockchain-based user identity platform where users can store their demographic information securely on the blockchain. The platform will allow users to create their digital identity, and the information
+                    will be stored immutably on the blockchain, providing them with a tamper-proof record of their identity.</p>
+                <div class="flex md:mt-4 mt-6">
+                    <button class="inline-flex text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded" onclick="connectMetamask()">Connect</button>
+
+                </div>
+                <div class="flex md:mt-4 mt-6">
+                    <p id="accountArea">Connection Status: NOT CONNECTED to Metamask </p>
+                </div>
+                <div class="flex md:mt-4 mt-6">
+                    <button class="inline-flex text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded" onclick="connectContract()">Contract</button>
+                </div>
+                <div class="flex md:mt-4 mt-6">
+                    <p id="contractArea">Connection Status: NOT CONNECTED to Smart Contract</p>
+                </div>
+                <div class="flex md:mt-4 mt-6">
+                    <button class="inline-flex text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded" onclick="readContract()">Get Data</button>
+                </div>
+                <p id="dataArea">Data Status: NO Data from Smart Contract </p>
+                <div class="flex md:mt-4 mt-6">
+                </div>
+                <div class="flex md:mt-4 mt-6">
+                    <button class="inline-flex text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded" onclick="changeWord()">Send Data</button>
+                </div>
+                <div class="flex md:mt-4 mt-6">
+                    <input placeholder="Name" type="text" id="Name" style="border: #000000;">
+                </div>
+                <div class="flex md:mt-4 mt-6">
+                    <input placeholder="adhaarNo" type="text" id="adhaarNo" style="border: #000000;">
+                </div>
+                <div class="flex md:mt-4 mt-6">
+                    <input placeholder="gender" type="text" id="gender" style="border: #000000;">
+                </div>
+                <div class="flex md:mt-4 mt-6">
+                    <input placeholder="age" type="text" id="age" style="border: #000000;">
+                </div>
+                <div class="flex md:mt-4 mt-6">
+                    <input placeholder="email" type="text" id="email" style="border: #000000;">
+                </div>
+                <div class="flex md:mt-4 mt-6">
+                    <input placeholder="phoneNo" type="text" id="phoneNo" style="border: #000000;">
+                </div>
+                <div class="flex md:mt-4 mt-6">
+                    <input placeholder="panNo" type="text" id="panNo" style="border: #000000;">
+                </div>
+                <div class="flex md:mt-4 mt-6">
+                    <input placeholder="maritalStatus" type="text" id="maritalStatus" style="border: #000000;">
+                </div>
+                <div class="flex md:mt-4 mt-6">
+                    <input placeholder="currentAddr" type="text" id="currentAddr" style="border: #000000;">
+                </div>
+                <div class="flex md:mt-4 mt-6">
+                    <input placeholder="residentialAddr" type="text" id="residentialAddr" style="border: #000000;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script>
+        let account;
+        const connectMetamask = async() => {
+            if (window.ethereum !== "undefined") {
+                const accounts = await ethereum.request({
+                    method: "eth_requestAccounts"
+                });
+                account = accounts[0];
+                document.getElementById("accountArea").innerHTML = `Account is: ${account}`;
+            }
+
+        }
+
+        const connectContract = async() => {
+                const ABI = [{
+                    "inputs": [{
+                        "internalType": "string",
+                        "name": "fullName",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "adhaarNo",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "gender",
+                        "type": "string"
+                    }, {
+                        "internalType": "uint256",
+                        "name": "age",
+                        "type": "uint256"
+                    }, {
+                        "internalType": "string",
+                        "name": "email",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "phoneNo",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "panNo",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "maritalStatus",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "currentAddr",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "residentialAddr",
+                        "type": "string"
+                    }],
+                    "name": "storeUserData",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                }, {
+                    "inputs": [],
+                    "name": "getUserData",
+                    "outputs": [{
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }],
+                    "stateMutability": "view",
+                    "type": "function"
+                }, {
+                    "inputs": [{
+                        "internalType": "address",
+                        "name": "userAddress",
+                        "type": "address"
+                    }],
+                    "name": "getUserDataByAddress",
+                    "outputs": [{
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }, {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }],
+                    "stateMutability": "view",
+                    "type": "function"
+                }];
+                const Address = "0x41002e6373ff8D30d45138314Dc9E248Ac261c4D";
+                window.web3 = await new Web3(window.ethereum);
+                window.contract = await new window.web3.eth.Contract(ABI, Address);
+                document.getElementById("contractArea").innerHTML = "connected to smart contract";
+            }
+            //Read data from Contract
+        const readContract = async() => {
+            const userAddress = "USER_ADDRESS";
+            let acc = account;
+            const userData = await contract.methods.getUserDataByAddress(acc).call();
+            const fullName = userData[0];
+            const adhaarNo = userData[1];
+            const gender = userData[2];
+            const age = userData[3];
+            const email = userData[4];
+            const phoneNo = userData[5];
+            const panNo = userData[6];
+            const maritalStatus = userData[7];
+            const currentAddr = userData[8];
+            const residentialAddr = userData[9];
+            const data = `Full Name: ${fullName}<br>
+                         Adhaar Number: ${adhaarNo}<br>
+                         Gender: ${gender}<br>
+                         Age: ${age}<br>
+                         Email: ${email}<br>
+                         Phone Number: ${phoneNo}<br>
+                         PAN Number: ${panNo}<br>
+                         Marital Status: ${maritalStatus}<br>
+                         Current Address: ${currentAddr}<br>
+                         Residential Address: ${residentialAddr}`;
+            document.getElementById("dataArea").innerHTML = data;
+        }
+        const changeWord = async() => {
+            const myEntry1 = document.getElementById("Name").value;
+            const myEntry2 = document.getElementById("adhaarNo").value;
+            const myEntry3 = document.getElementById("gender").value;
+            const myEntry4 = document.getElementById("age").value;
+            const myEntry5 = document.getElementById("email").value;
+            const myEntry6 = document.getElementById("phoneNo").value;
+            const myEntry7 = document.getElementById("panNo").value;
+            const myEntry8 = document.getElementById("maritalStatus").value;
+            const myEntry9 = document.getElementById("currentAddr").value;
+            const myEntry10 = document.getElementById("residentialAddr").value;
+            await window.contract.methods.storeUserData(myEntry1, myEntry2, myEntry3, myEntry4, myEntry5, myEntry6, myEntry7, myEntry8, myEntry9, myEntry10).send({
+                from: account
+            });
+        }
+    </script>
+</body>
+
+</html>
